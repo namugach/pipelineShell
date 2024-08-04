@@ -1,9 +1,10 @@
 import subprocess
 
-def send_ssh_comm(host, name, comm):
+def send_ssh_comm(host, name, comm, port=22):
 	ssh_command = [
 		'ssh',
 		'-o', 'StrictHostKeyChecking=no',
+		'-p', str(port),
 		host, comm
 	]
 	print(f"=========={name} 실행...========")
