@@ -10,6 +10,6 @@ class ServerInfo:
 
 server_infos = [
 	ServerInfo(1, "server1", "172.31.14.186"),
-	ServerInfo(2, "server2", "172.31.1.229"),
-	ServerInfo(3, "server3", "172.31.10.99")
+	ServerInfo(2, "server2", "172.31.10.99"),
+	ServerInfo(3, "server3", "172.31.1.229")
 ]

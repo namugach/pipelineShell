@@ -42,11 +42,11 @@ def update_server(server_info:ServerInfo, server_infos:List [ServerInfo]=server_
 
 	print(f"Updated {name}")
 
-update_server(server_infos[0], server_infos)
+# update_server(server_infos[0], server_infos)
 
-# for info in server_infos:
-# 	# print(info)
-# 	update_server(info, server_infos)
+for info in server_infos:
+	# print(info)
+	update_server(info, server_infos)
 
 # for server, (id, ip) in servers.items():
 # 	print(f"Updating {server} with ID {id} and IP {ip}")

@@ -25,6 +25,10 @@ def get_create_container_comm(name, port=2222, server_infos=server_infos):
 		--add-host {server_infos[1].name}:{server_infos[1].ip} \\
 		--add-host {server_infos[2].name}:{server_infos[2].ip} \\
 		-p {port}:{port} \\
+		-p 9092:9092 \\
+		-p 2180:2180 \\
+		-p 3306:3306 \\
+		-p 2888:2888 \\
 		namugach/ubuntu-pipeline:24.04-kafka-test \\
 		/bin/bash -c "echo '{id_rsa}' > /home/ubuntu/.ssh/id_rsa && \\
 				echo '{id_rsa_pub}' > /home/ubuntu/.ssh/id_rsa.pub && \\

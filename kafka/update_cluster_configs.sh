@@ -4,8 +4,8 @@
 declare -A servers
 servers=(
 	["server1"]="1 172.31.14.186"
-	["server2"]="2 172.31.1.229"
-	["server3"]="3 172.31.10.99"
+	["server2"]="3 172.31.10.99"
+	["server3"]="2 172.31.1.229"
 )
 
 get_ip_address() {
