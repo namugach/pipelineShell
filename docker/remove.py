@@ -1,4 +1,4 @@
-import os, sys, subprocess, time
+import sys
 from pathlib import Path
 
 base_dir = Path('/home/ubuntu/run')
@@ -15,4 +15,3 @@ def get_remote_container_comm(name):
 
 for info in server_infos:
 	send_ssh_comm(info.name, f"{info.name}: 제거", get_remote_container_comm(info.name))
-	time.sleep(1)

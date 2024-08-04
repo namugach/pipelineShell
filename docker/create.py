@@ -6,7 +6,7 @@ sys.path.insert(0, str(base_dir))
 from config.config import server_infos
 from util.util import send_ssh_comm
 
-ssh_key_dir = "./config/keygen"
+ssh_key_dir = f"{base_dir}/config/keygen"
 id_rsa_path = Path(ssh_key_dir) / "id_rsa"
 id_rsa_pub_path = Path(ssh_key_dir) / "id_rsa.pub"
 
