@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 base_dir = Path('/home/ubuntu/run')
 sys.path.insert(0, str(base_dir))
-from config.config import server_infos
+from config.config import update_infos
 from config.config import ServerInfo
 from util.util import send_ssh_comm
 
@@ -13,9 +13,10 @@ from util.util import send_ssh_comm
 MYID_PATH = "/home/ubuntu/zkdata/myid"
 SERVER_PROPERTIES_PATH = "~/app/kafka/kafka_2.13-3.6.2/config/server.properties"
 ZOOKEEPER_PROPERTIES_PATH = "~/app/kafka/kafka_2.13-3.6.2/config/zookeeper.properties"
+START_SERVER_PATH = "~/run/kafka/start_server.sh"
+START_ZOOKEEPR_PATH = "~/run/kafka/start_zookeeper.sh"
 
-
-def update_server(server_info:ServerInfo, server_infos:List [ServerInfo]=server_infos):
+def update_server(server_info:ServerInfo, update_infos:List [ServerInfo]=update_infos):
 	# myid 파일 업데이트
 	id = server_info.id 
 	ip = server_info.ip
@@ -29,24 +30,28 @@ def update_server(server_info:ServerInfo, server_infos:List [ServerInfo]=server_
 		f"sed -i 's/^broker.id=.*/broker.id={id}/' {SERVER_PROPERTIES_PATH}",
 		f"sed -i 's|^listeners=PLAINTEXT://.*|listeners=PLAINTEXT://{ip}:9092|' {SERVER_PROPERTIES_PATH}",
 		f"sed -i 's|^advertised.listeners=PLAINTEXT://.*|advertised.listeners=PLAINTEXT://{ip}:9092|' {SERVER_PROPERTIES_PATH}",
-		f"sed -i 's/^zookeeper.connect=.*/zookeeper.connect={server_infos[0].ip}:2181,{server_infos[1].ip}:2181,{server_infos[2].ip}:2181/' {SERVER_PROPERTIES_PATH}",
+		f"sed -i 's/^zookeeper.connect=.*/zookeeper.connect={update_infos[0].ip}:2181,{update_infos[1].ip}:2181,{update_infos[2].ip}:2181/' {SERVER_PROPERTIES_PATH}",
 		
 		# zookeeper.properties 파일 업데이트
-		f"sed -i 's|^server.1=.*|server.1={server_infos[0].ip}:2888:3888|' {ZOOKEEPER_PROPERTIES_PATH}",
-		f"sed -i 's|^server.2=.*|server.2={server_infos[1].ip}:2888:3888|' {ZOOKEEPER_PROPERTIES_PATH}",
-		f"sed -i 's|^server.3=.*|server.3={server_infos[2].ip}:2888:3888|' {ZOOKEEPER_PROPERTIES_PATH}"
-	]
+		f"sed -i 's|^server.1=.*|server.1={update_infos[0].ip}:2888:3888|' {ZOOKEEPER_PROPERTIES_PATH}",
+		f"sed -i 's|^server.2=.*|server.2={update_infos[1].ip}:2888:3888|' {ZOOKEEPER_PROPERTIES_PATH}",
+		f"sed -i 's|^server.3=.*|server.3={update_infos[2].ip}:2888:3888|' {ZOOKEEPER_PROPERTIES_PATH}"
+		
 
+
+	]
+		# f"sed -i 's|>/dev/null 2>&1 &|>kafka_server.log 2>&1|' {START_SERVER_PATH}"
+		# f"sed -i 's|>/dev/null 2>&1 &|>zookeper_server.log 2>&1|' {START_ZOOKEEPR_PATH}"
 	for cmd in commands:
 		send_ssh_comm(name, f"{name} - 명령어 실행", cmd, port)
 
 	print(f"Updated {name}")
 
-# update_server(server_infos[0], server_infos)
+# update_server(update_info[0], update_info)
 
-for info in server_infos:
+for info in update_infos:
 	# print(info)
-	update_server(info, server_infos)
+	update_server(info, update_infos)
 
 # for server, (id, ip) in servers.items():
 # 	print(f"Updating {server} with ID {id} and IP {ip}")
