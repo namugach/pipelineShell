@@ -1,13 +1,21 @@
-import sys, subprocess, time
+import os, sys, subprocess, time
 from pathlib import Path
 
 base_dir = Path('/home/ubuntu/run')
 sys.path.insert(0, str(base_dir))
 from config.config import server_infos
 
-def create_container(
-	name, port=2222, server_infos=server_infos, ssh_key=""
-):
+ssh_key_dir = "./config/keygen"
+id_rsa_path = Path(ssh_key_dir) / "id_rsa"
+id_rsa_pub_path = Path(ssh_key_dir) / "id_rsa.pub"
+
+def get_create_container_comm(name, port=2222, server_infos=server_infos):
+	with open(id_rsa_path, 'r') as id_rsa_file:
+		id_rsa = id_rsa_file.read()
+	
+	with open(id_rsa_pub_path, 'r') as id_rsa_pub_file:
+		id_rsa_pub = id_rsa_pub_file.read()
+	
 	return f'''
 	docker container run -itd \\
 		--name {name} \\
@@ -17,17 +25,27 @@ def create_container(
 		--add-host {server_infos[2].name}:{server_infos[2].ip} \\
 		-p {port}:{port} \\
 		namugach/ubuntu-pipeline:24.04-kafka-test \\
-		/bin/bash -c f"{ssh_key} >> /home/ubuntu/.ssh/authorized_keys"
+		/bin/bash -c "echo '{id_rsa}' > /home/ubuntu/.ssh/id_rsa && \\
+				echo '{id_rsa_pub}' > /home/ubuntu/.ssh/id_rsa.pub && \\
+				echo '{id_rsa_pub}' > /home/ubuntu/.ssh/authorized_keys && \\
+				chmod 600 /home/ubuntu/.ssh/id_rsa && \\
+				chmod 644 /home/ubuntu/.ssh/id_rsa.pub && \\
+				sudo service ssh start && \\
+				sudo service mysql start && \\
+				tail -f /dev/null"
 	'''
 
-
-for info in server_infos:
+def send_ssh_comm(host, name, comm):
 	ssh_command = [
 		'ssh',
 		'-o', 'StrictHostKeyChecking=no',
-		info.name,
-		create_container(info.name)
+		host, comm
 	]
-	print(f"=========={info.name} 생성 중...========")
-	subprocess.run(ssh_command, capture_output=True, text=True)
+	print(f"=========={name} 실행...========")
+	run = subprocess.run(ssh_command, capture_output=True, text=True)
+	print(run.stdout)
+
+
+for info in server_infos:
+	send_ssh_comm(info.name, info.name, get_create_container_comm(info.name))
 	time.sleep(1)
