@@ -1,6 +1,13 @@
 #!/bin/bash
 
-ips=("server1" "server2" "server3")
+ips=(
+  "server1"
+  "server1 -p 2222"
+  "server2"
+  "server2 -p 2222"
+  "server3"
+  "server3 -p 2222"
+)
 
 # SSH 키 파일 (필요하면 경로 지정)
 # key_file="~/.ssh/id_rsa"
