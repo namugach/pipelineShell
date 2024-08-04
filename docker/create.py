@@ -1,9 +1,10 @@
-import os, sys, subprocess, time
+import sys, time
 from pathlib import Path
 
 base_dir = Path('/home/ubuntu/run')
 sys.path.insert(0, str(base_dir))
 from config.config import server_infos
+from util.util import send_ssh_comm
 
 ssh_key_dir = "./config/keygen"
 id_rsa_path = Path(ssh_key_dir) / "id_rsa"
@@ -34,17 +35,6 @@ def get_create_container_comm(name, port=2222, server_infos=server_infos):
 				sudo service mysql start && \\
 				tail -f /dev/null"
 	'''
-
-def send_ssh_comm(host, name, comm):
-	ssh_command = [
-		'ssh',
-		'-o', 'StrictHostKeyChecking=no',
-		host, comm
-	]
-	print(f"=========={name} 실행...========")
-	run = subprocess.run(ssh_command, capture_output=True, text=True)
-	print(run.stdout)
-
 
 for info in server_infos:
 	send_ssh_comm(info.name, info.name, get_create_container_comm(info.name))
