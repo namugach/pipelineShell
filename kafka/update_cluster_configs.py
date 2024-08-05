@@ -1,4 +1,4 @@
-import sys, time
+import sys
 from pathlib import Path
 from typing import List
 base_dir = Path('/home/ubuntu/run')
@@ -40,21 +40,12 @@ def update_server(server_info:ServerInfo, update_infos:List [ServerInfo]=update_
 
 
 	]
-		# f"sed -i 's|>/dev/null 2>&1 &|>kafka_server.log 2>&1|' {START_SERVER_PATH}"
-		# f"sed -i 's|>/dev/null 2>&1 &|>zookeper_server.log 2>&1|' {START_ZOOKEEPR_PATH}"
 	for cmd in commands:
 		send_ssh_comm(name, f"{name} - 명령어 실행", cmd, port)
 
 	print(f"Updated {name}")
 
-# update_server(update_info[0], update_info)
-
 for info in update_infos:
-	# print(info)
 	update_server(info, update_infos)
-
-# for server, (id, ip) in servers.items():
-# 	print(f"Updating {server} with ID {id} and IP {ip}")
-# 	update_server(server, id, ip, zookeeper_connect)
 
 print("All servers updated successfully.")
