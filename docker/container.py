@@ -11,16 +11,16 @@ from util.util import send_ssh_comm
 
 # Function to get the Docker image command
 def get_image(command):
-	return f'docker image {command}'
+	return f'docker container {command}'
 
 # Main execution
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-		print("Usage: python image.py <command> [options]")
+		print("Usage: python container.py <command> [options]")
 		sys.exit(1)
 
 	command = " ".join(sys.argv[1:])
 
 	for info in server_infos:
 		ssh_command = get_image(command)
-		send_ssh_comm(info.name, f"{info.name}: 이미지", ssh_command)
+		send_ssh_comm(info.name, f"{info.name}: 컨테이너", ssh_command)
