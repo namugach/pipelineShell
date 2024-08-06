@@ -1,4 +1,4 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(dirname "$0")
-python "$SCRIPT_DIR/create.py"
+python "$SCRIPT_DIR/start_container.py"

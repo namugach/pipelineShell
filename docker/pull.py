@@ -10,17 +10,17 @@ from config.config import server_infos
 from util.util import send_ssh_comm
 
 # Function to get the Docker image command
-def get_image(command):
-	return f'docker image {command}'
+def get_pull(command):
+	return f'docker pull {command}'
 
 # Main execution
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-		print("Usage: python image.py <command> [options]")
+		print("Usage: python pull.py <command> [options]")
 		sys.exit(1)
 
 	command = " ".join(sys.argv[1:])
 
 	for info in server_infos:
-		ssh_command = get_image(command)
-		send_ssh_comm(info.name, f"{info.name}: 이미지 확인", ssh_command)
+		ssh_command = get_pull(command)
+		send_ssh_comm(info.name, f"{info.name}: 당겨오는 중...", ssh_command)
