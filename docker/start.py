@@ -14,4 +14,4 @@ def get_remote_container_start(name):
 
 
 for info in server_infos:
-	send_ssh_comm(info.name, f"{info.name}: 제거", get_remote_container_start(info.name))
+	send_ssh_comm(info.name, f"{info.name}: 시작", get_remote_container_start(info.name))
