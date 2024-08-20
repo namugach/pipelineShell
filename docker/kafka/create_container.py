@@ -1,7 +1,7 @@
 import sys, time
 from pathlib import Path
 
-base_dir = Path('/home/ubuntu/run')
+base_dir = Path('/root/run')
 sys.path.insert(0, str(base_dir))
 from config.config import server_infos
 from util.util import send_ssh_comm
@@ -52,12 +52,12 @@ def get_create_container_comm(id, name, port=2222, server_infos=server_infos):
 		--net pipeline \\
 		--ip 172.18.0.{id+10} \\
 		namugach/ubuntu-pipeline:24.04-kafka-test \\
-		/bin/bash -c "echo '{id_rsa}' > /home/ubuntu/.ssh/id_rsa && \\
-				echo '{id_rsa_pub}' > /home/ubuntu/.ssh/id_rsa.pub && \\
-				echo '{id_rsa_pub}' > /home/ubuntu/.ssh/authorized_keys && \\
-				echo '{ssh_config}' >> /home/ubuntu/.ssh/config && \\
-				chmod 600 /home/ubuntu/.ssh/id_rsa && \\
-				chmod 644 /home/ubuntu/.ssh/id_rsa.pub && \\
+		/bin/bash -c "echo '{id_rsa}' > /root/.ssh/id_rsa && \\
+				echo '{id_rsa_pub}' > /root/.ssh/id_rsa.pub && \\
+				echo '{id_rsa_pub}' > /root/.ssh/authorized_keys && \\
+				echo '{ssh_config}' >> /root/.ssh/config && \\
+				chmod 600 /root/.ssh/id_rsa && \\
+				chmod 644 /root/.ssh/id_rsa.pub && \\
 				sudo service ssh start && \\
 				sudo service mysql start && \\
 				tail -f /dev/null"

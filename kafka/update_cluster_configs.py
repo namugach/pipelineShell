@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 from typing import List
-base_dir = Path('/home/ubuntu/run')
+base_dir = Path('/root/run')
 sys.path.insert(0, str(base_dir))
 from config.config import update_infos
 from config.config import ServerInfo
@@ -10,7 +10,7 @@ from util.util import send_ssh_comm
 
 
 
-MYID_PATH = "/home/ubuntu/zkdata/myid"
+MYID_PATH = "/root/zkdata/myid"
 SERVER_PROPERTIES_PATH = "~/app/kafka/kafka_2.13-3.6.2/config/server.properties"
 ZOOKEEPER_PROPERTIES_PATH = "~/app/kafka/kafka_2.13-3.6.2/config/zookeeper.properties"
 START_SERVER_PATH = "~/run/kafka/start_server.sh"

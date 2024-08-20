@@ -2,7 +2,7 @@
 import sys, time
 from pathlib import Path
 
-base_dir = Path('/home/ubuntu/run')
+base_dir = Path('/root/run')
 sys.path.insert(0, str(base_dir))
 from config.config import server_infos
 from util.util import send_ssh_comm
