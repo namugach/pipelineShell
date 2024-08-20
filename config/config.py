@@ -9,9 +9,9 @@ class ServerInfo:
 		pass
 
 server_infos = [
-	ServerInfo(1, "server1", "172.17.0.2"),
-	ServerInfo(2, "server2", "172.17.0.3"),
-	ServerInfo(3, "server3", "172.17.0.4")
+	ServerInfo(1, "server1", "172.20.0.10"),
+	ServerInfo(2, "server2", "172.20.0.11"),
+	ServerInfo(3, "server3", "172.20.0.12")
 ]
 
 
