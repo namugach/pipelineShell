@@ -1,7 +1,7 @@
 # | hostname | ip | port |
 
 class ServerInfo:
-	def __init__(self, id, name, ip, port=2222) -> None:
+	def __init__(self, id, name, ip, port=22) -> None:
 		self.id = id
 		self.name = name
 		self.ip = ip
