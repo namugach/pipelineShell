@@ -1,0 +1,68 @@
+version: "3"
+
+
+x-common-configuration: &common-config
+  image: ${IMAGE_NAME}:${IMAGE_VERSION}
+  volumes:
+    - ${VOLUMES_SRC_PATH} # /src
+    - ${VOLUMES_RES_PATH} # /res
+  tty: true
+  stdin_open: true
+  entrypoint: ${ENTRYPOINT}
+  command: ${COMMAND}
+  env_file:
+    - .env.common # 이게 공통으로 들어갈 환경 변수 파일
+  networks:
+    mlops:
+      ipv4_address: ${SERVER_IP}
+  extra_hosts:
+    - "${SERVER_NAME}${SERVER_ID_1}:${SERVER_IP_1}"
+    - "${SERVER_NAME}${SERVER_ID_2}:${SERVER_IP_2}"
+    - "${SERVER_NAME}${SERVER_ID_3}:${SERVER_IP_3}"
+
+
+services:
+  server1:
+    <<: *common-config  # common-config 앵커를 가져옴
+    environment:
+      BRKER_ID: ${SERVER_ID_1}
+      SERVER_IP: ${SERVER_IP_1}
+    hostname: ${SERVER_NAME}${SERVER_ID_1}
+    container_name: ${SERVER_NAME}${SERVER_ID_1}
+    networks:
+      mlops:
+        ipv4_address: ${SERVER_IP_1}
+
+  server2:
+    <<: *common-config  # common-config 앵커를 가져옴
+    environment:
+      BRKER_ID: ${SERVER_ID_2}
+      SERVER_IP: ${SERVER_IP_2}
+    hostname: ${SERVER_NAME}${SERVER_ID_2}
+    container_name: ${SERVER_NAME}${SERVER_ID_2}
+    networks:
+      mlops:
+        ipv4_address: ${SERVER_IP_2}
+    depends_on:
+      - server1
+
+  server3:
+    <<: *common-config  # common-config 앵커를 가져옴
+    environment:
+      BRKER_ID: ${SERVER_ID_3}
+      SERVER_IP: ${SERVER_IP_3}
+    hostname: ${SERVER_NAME}${SERVER_ID_3}
+    container_name: ${SERVER_NAME}${SERVER_ID_3}
+    networks:
+      mlops:
+        ipv4_address: ${SERVER_IP_3}
+    depends_on:
+      - server2
+
+networks:
+  mlops:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
