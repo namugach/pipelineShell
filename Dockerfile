@@ -5,30 +5,42 @@ RUN cp /home/ubuntu/.bashrc /root/.bashrc
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Asia/Seoul
 
-RUN apt-get update && \
-  apt-get install -y \
-  sudo \
-  gettext \
-  # envsubst 사용 할 수 있게 하는 패키지
-  openssh-server \
-  curl \
-  net-tools \
-  git \
-  wget \
-  tree \
-  vim \
-  openssh-server \
-  mysql-server \
-  openjdk-17-jre-headless \
-  telnet \
-  tcpdump \
-  software-properties-common \
+RUN apt-get update \
+  && apt-get install -y software-properties-common \
   && add-apt-repository ppa:deadsnakes/ppa \
+  && apt-get install -y python3.11 pip \
   && apt-get update \
-  && apt-get install -y python3.11 \
+  && apt-get install -y \
+     python3.11 \
+     pip \
+     sudo \
+     gettext \
+     # envsubst 사용 할 수 있게 하는 패키지
+     openssh-server \
+     curl \
+     net-tools \
+     git \
+     wget \
+     tree \
+     vim \
+     openssh-server \
+     mysql-server \
+     openjdk-17-jre-headless \
+     telnet \
+     tcpdump \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN ln -s /bin/python3.11 /bin/python
+
+# RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+# RUN apt install python3.11-venv python3.11-distutils
+# RUN python3.11 -m ensurepip --upgrade
+
+RUN pip install kafka-python pandas sqlalchemy pymysql asyncssh
+RUN pip install --force-reinstall cffi
+RUN pip install --force-reinstall cryptography
+
 
 RUN echo "\nexport JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64\n" >> /root/.bashrc
 
@@ -44,8 +56,6 @@ RUN mkdir -p /root/app/kafka && \
   tar -xzf kafka_2.13-3.6.2.tgz && \
   rm kafka_2.13-3.6.2.tgz
 
-COPY ./res/kafka/server.properties /root/app/kafka/kafka_2.13-3.6.2/config/server.properties
-COPY ./res/kafka/zookeeper.properties /root/app/kafka/kafka_2.13-3.6.2/config/zookeeper.properties
 
 #### 여기부터 SSH 
 RUN mkdir /var/run/sshd
@@ -79,10 +89,29 @@ RUN echo "Host server*\n \
  StrictHostKeyChecking no\n \
  UserKnownHostsFile=/dev/null" >> /root/.ssh/config
 
-# MySQL 초기화 설정
-RUN service mysql start && \
-    mysql -e "CREATE DATABASE IF NOT EXISTS mydatabase;"
 
+# MySQL 초기화 설정
+RUN chown -R mysql:mysql /var/run/mysqld
+RUN chmod 755 /var/run/mysqld
+
+RUN sed -ri 's/^#.+port.+= 3306/port = 3306/' /etc/mysql/mysql.conf.d/mysqld.cnf
+RUN sed -ri 's/^bind-address.+= 127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+RUN service mysql start && \
+    mysql -e "CREATE DATABASE IF NOT EXISTS mydatabase; \
+    CREATE USER 'ubuntu'@'%' IDENTIFIED BY '1234'; \
+    GRANT ALL PRIVILEGES ON *.* TO 'ubuntu'@'%' WITH GRANT OPTION; \
+    FLUSH PRIVILEGES;"
+# RUN service mysql start && \
+#     mysql -e "CREATE DATABASE IF NOT EXISTS mydatabase;" \
+#     mysql -e "CREATE USER 'ubuntu'@'%' IDENTIFIED BY '1234';" \
+#     mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'ubuntu'@'%' WITH GRANT OPTION;" \
+#     mysql -e "FLUSH PRIVILEGES;"
+
+
+
+
+# RUN service mysql restart
 
 # 포트 노출
 # EXPOSE 22

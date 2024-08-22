@@ -1,20 +1,19 @@
-version: "3"
+version: "1"
 
 
 x-common-configuration: &common-config
   image: ${IMAGE_NAME}:${IMAGE_VERSION}
   volumes:
     - ${VOLUMES_SRC_PATH} # /src
-    - ${VOLUMES_RES_PATH} # /res
+    - ${VOLUMES_RUN_PATH} # /run
+    - ${VOLUMES_TEST_PATH} # /test
   tty: true
   stdin_open: true
   entrypoint: ${ENTRYPOINT}
   command: ${COMMAND}
   env_file:
     - .env.common # 이게 공통으로 들어갈 환경 변수 파일
-  networks:
-    mlops:
-      ipv4_address: ${SERVER_IP}
+  networks: mlops
   extra_hosts:
     - "${SERVER_NAME}${SERVER_ID_1}:${SERVER_IP_1}"
     - "${SERVER_NAME}${SERVER_ID_2}:${SERVER_IP_2}"
