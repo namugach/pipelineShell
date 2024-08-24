@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, Table, Column, MetaData, inspect
 from sqlalchemy.types import String, BigInteger, Float, DateTime
 import pymysql
 
-CSV_DATA = 'data.csv'
+CSV_DATA = '/root/test/data.csv'
 
 # 데이터베이스 연결 설정
 DATABASE_USER = 'ubuntu'

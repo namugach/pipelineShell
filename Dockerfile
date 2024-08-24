@@ -32,10 +32,8 @@ RUN apt-get update \
 
 RUN ln -s /bin/python3.11 /bin/python
 
-# RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
-# RUN apt install python3.11-venv python3.11-distutils
-# RUN python3.11 -m ensurepip --upgrade
+
 
 RUN pip install kafka-python pandas sqlalchemy pymysql asyncssh
 RUN pip install --force-reinstall cffi
@@ -102,16 +100,7 @@ RUN service mysql start && \
     CREATE USER 'ubuntu'@'%' IDENTIFIED BY '1234'; \
     GRANT ALL PRIVILEGES ON *.* TO 'ubuntu'@'%' WITH GRANT OPTION; \
     FLUSH PRIVILEGES;"
-# RUN service mysql start && \
-#     mysql -e "CREATE DATABASE IF NOT EXISTS mydatabase;" \
-#     mysql -e "CREATE USER 'ubuntu'@'%' IDENTIFIED BY '1234';" \
-#     mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'ubuntu'@'%' WITH GRANT OPTION;" \
-#     mysql -e "FLUSH PRIVILEGES;"
 
-
-
-
-# RUN service mysql restart
 
 # 포트 노출
 # EXPOSE 22
@@ -123,13 +112,3 @@ CMD [ \
   "/bin/bash", "-c", \
   "service mysql start && /usr/sbin/sshd -D" \
 ]
-
-# 이렇게 사용 할 수 도 있음
-# CMD [ \
-# "/bin/bash", "-c", \
-# "echo \
-# '172.17.0.2 server1\n \
-# 172.17.0.3 server2\n \
-# 172.17.0.4 server3' >> /etc/hosts && \
-# service mysql start && /usr/sbin/sshd -D" \
-# ]
