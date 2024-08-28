@@ -104,43 +104,11 @@ docker compose ps
 
 ```
 .
-├── config
-│   ├── api_keys
-│   │   └── google.py
-│   ├── config.py
-│   └── requirements
-│       ├── install.sh
-│       └── requirements.txt
 ├── docker-compose.yml
 ├── install.sh
 ├── main.py
-├── res
-│   └── url
-│       ├── list.json
-│       ├── list_form.json
-│       ├── list_proto.json
-│       └── list_test.json
 ├── run.sh
 ├── src
-│   ├── ai
-│   │   ├── chat_gpt
-│   │   │   └── opnai.py
-│   │   └── gemini
-│   │       ├── gemini.py
-│   │       └── model_type.py
-│   ├── prompt
-│   │   ├── img_to_text_parser
-│   │   │   ├── eng.md
-│   │   │   └── kor.md
-│   │   ├── json_converter
-│   │   │   ├── eng.md
-│   │   │   └── kor.md
-│   │   └── string
-│   │       └── kor.md
-│   ├── screenshot
-│   │   ├── petter.py
-│   │   ├── prop.py
-│   │   └── selenium.py
 │   ├── run
 │   │   ├── config
 │   │   │   └── config.py
