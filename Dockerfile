@@ -101,6 +101,16 @@ RUN service mysql start && \
     GRANT ALL PRIVILEGES ON *.* TO 'ubuntu'@'%' WITH GRANT OPTION; \
     FLUSH PRIVILEGES;"
 
+RUN echo "[mysqld]\n \
+    character-set-server=utf8\n \
+    collation-server=utf8_general_ci\n \
+    \n \
+    [client]\n \
+    default-character-set=utf8\n \
+    \n \
+    [mysql]\n \
+    default-character-set=utf8" >> /etc/mysql/mysql.conf.d/mysqld.cnf
+    
 
 # 포트 노출
 # EXPOSE 22
